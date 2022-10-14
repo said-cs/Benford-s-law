@@ -1,0 +1,2 @@
+It's a python program that compares real-life datasets to Benford's law and determine whether they appear fraudulent or not.
+For the dataset, I used the votes cast in the continuous 2016 US presidential election.
