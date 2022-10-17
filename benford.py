@@ -40,10 +40,8 @@ def chi_square_test(data_count, expected_counts):
     for data, expected in zip(data_count, expected_counts):
         chi_square = math.pow(data - expected, 2)
         chi_square_stat += chi_square / expected
-    print("\nChi Squared Test Statistic = {:.3f}".format(chi_square_test))
+    print("\nChi Squared Test Statistic = {}".format(chi_square_test))
     print("Critical value at a P-value of 0.05 is 15.51")
-
-    return chi_square_stat < 15.51
 
 def bar_chart(data_pct):
     """Make bar chart of observed vs expected 1st-digit frequency (%)"""
@@ -52,7 +50,7 @@ def bar_chart(data_pct):
     index = [i + 1 for i in range(len(data_pct))]   # 1se digits for x-axis
 
     # Text for labels, title and ticks
-    fig.canvas.set_window_title("Perce,tage First Digits")
+    fig.canvas.manager.set_window_title("Perce,tage First Digits")
     ax.set_title("Data vs. Benford Values", fontsize=15)
     ax.set_ylabel("Frequency (%)", fontsize=15)
     ax.set_xticks(index)
@@ -80,10 +78,12 @@ def main():
     """Call functions and print stats"""
     # Load data
     while True:
-        filename = "Illinois_votes.txt"
+        filename = input("\nName of file with COUNT data")
         try:
             data_list = load_data(filename)
-        except:
+        except IOError as e:
+            print("{}. Try again".format(e), file=sys.stderr)
+        else: 
             break
     
     data_count, data_pct, total_count = count_first_digits(data_list)
@@ -93,7 +93,7 @@ def main():
 
     print("First Digit Probabilities:")
     for i in range(1, 10):
-        print("{}: observed: {:.3f} expected: {:.3f}".format(i, data_pct[i, -1] / 100))
+        print("{}: observed: {:.3f} expected: {:.3f}".format(i, data_pct[i - 1] / 100, BENFORD[i - 1] / 100))
 
     if chi_square_test(data_count, expected_counts):
         print("Observed distribution matche sexpected distribution")
